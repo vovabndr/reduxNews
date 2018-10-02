@@ -1,5 +1,5 @@
 //
-//  ViewModel.swift
+//  New.swift
 //  reduxNews
 //
 //  Created by Владимир Бондарь on 10/1/18.
@@ -7,13 +7,9 @@
 //
 
 import Foundation
-
 extension News {
-  class ViewModel {
-    
-    init(){
-      
+    struct Article: Equatable {
+      var title: String
+      var url: String
     }
-    
-  }
 }

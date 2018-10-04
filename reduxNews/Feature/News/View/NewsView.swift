@@ -28,6 +28,7 @@ class NewsView: UIView, NibInitializable {
   @IBOutlet fileprivate weak var textField: UITextField!
   @IBOutlet weak var indicator: UIActivityIndicatorView!
 
+  lazy var didSelectRowAt = Signal<Int, NoError>.pipe()
   private var news: [Props.ArticleProps] = []
   private var renderedProps: Props?
 
@@ -37,6 +38,7 @@ class NewsView: UIView, NibInitializable {
   }
 
   private func setup() {
+    table.delegate = self
     table.dataSource = self
     table.register(NewsTableViewCell.self)
   }
@@ -46,11 +48,17 @@ class NewsView: UIView, NibInitializable {
       self.news = props.news
       table.reloadData()
     }
-
     if props.isLoading != renderedProps?.isLoading {
       props.isLoading ? indicator.startAnimating() : indicator.stopAnimating()
     }
+
     renderedProps = props
+  }
+}
+
+extension NewsView: UITableViewDelegate {
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    didSelectRowAt.input.send(value: indexPath.row)
   }
 }
 

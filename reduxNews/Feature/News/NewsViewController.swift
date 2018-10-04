@@ -38,20 +38,33 @@ extension News {
     private func bindUI () {
       let inputs = ViewModel.Inputs(
           viewWillAppear: reactive.viewWillAppear,
-          searchText: newsView.reactive.continuousTextValues
+          searchText: newsView.reactive.continuousTextValues,
+          selectedRow: newsView.didSelectRowAt.output
         )
 
       let outputs = viewModel.makeOutputs(inputs: inputs)
+
       outputs.props.producer
         .observeForUI()
         .take(duringLifetimeOf: self)
         .startWithValues { [weak self] props in
           self?.renderProps(props)
         }
+
+      outputs.route.producer
+        .observeForUI()
+        .startWithValues { [weak self] route in self?.navigate(by: route) }
     }
 
     private func renderProps(_ props: NewsView.Props) {
         newsView.renderProps(props: props)
+    }
+
+    private func navigate(by route: Route) {
+      switch route {
+      case .detail(let article):
+        print(article.title)
+      }
     }
   }
 }

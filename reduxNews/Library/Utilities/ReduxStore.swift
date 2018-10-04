@@ -22,8 +22,9 @@ final class ReduxStore<State, Action> {
   init(
     initialState: State,
     reducer: @escaping Reducer,
-    middleWares: [Middleware] = []
+    middleWares: [Middleware]
     ) {
+
     let stateMutableProperety = MutableProperty(initialState)
 
     self.reducer = reducer

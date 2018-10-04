@@ -21,5 +21,6 @@ extension News {
     case loadStatus(Bool)
     case setNewsSuccess([Article])
     case setError(String)
+    case select(Int)
   }
 }

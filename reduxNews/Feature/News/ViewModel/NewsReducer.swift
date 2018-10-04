@@ -16,6 +16,8 @@ extension News {
       return state.lense(by: \State.error, value: "error")
     case .setNewsSuccess(let newArticles):
       return state.lense(by: \State.article, value: newArticles)
+    case .select:
+      return state
     }
   }
 }

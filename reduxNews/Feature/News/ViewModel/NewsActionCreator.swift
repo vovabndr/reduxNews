@@ -34,7 +34,14 @@ extension News {
       let setLoadingAction = isLoading.output
         .map(Action.loadStatus)
 
-      self.actions = Signal.merge(setLoadAction, setErrorAction, setLoadingAction)
+      let selectedAction = inputs.selectedRow.map(Action.select)
+
+      self.actions = Signal.merge(
+        setLoadAction,
+        setErrorAction,
+        setLoadingAction,
+        selectedAction
+      )
     }
   }
 }

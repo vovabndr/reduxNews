@@ -13,14 +13,21 @@ import ReactiveCocoa
 import ReactiveSwift
 
 extension News {
+
+  enum Route {
+    case detail(News.Article)
+  }
+
   final class ViewModel {
     struct Inputs {
       let viewWillAppear: Signal<Void, NoError>
       let searchText: Signal<String?, NoError>
+      let selectedRow: Signal<Int, NoError>
     }
 
     struct Outputs {
       let props: Property<NewsView.Props>
+      let route: Signal<Route, NoError>
     }
 
     let newsService: NewsService
@@ -31,7 +38,9 @@ extension News {
 
     func makeOutputs(inputs: Inputs) -> Outputs {
       let initialState = State(article: [], error: nil, isNewsLoading: false)
-      let store = ReduxStore<State, Action>(initialState: initialState, reducer: reduce)
+      let (route, routingMiddleware) = News.makeRoutingMiddleware()
+
+      let store = Store(initialState: initialState, reducer: reduce, middleWares: [routingMiddleware])
 
       let props = store.state.map(stateToProps)
 
@@ -40,7 +49,10 @@ extension News {
         .take(duringLifetimeOf: self)
         .observeValues(store.dispatch)
 
-      return Outputs(props: props)
+      return Outputs(
+        props: props,
+        route: route
+      )
     }
   }
 }

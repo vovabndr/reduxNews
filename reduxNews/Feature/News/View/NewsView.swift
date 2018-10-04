@@ -7,17 +7,67 @@
 //
 
 import UIKit
+import ReactiveSwift
+import Result
 
-class NewsView: UIView, NibInitializable  {
-  @IBOutlet weak var table: UITableView!
-  
-  override init(frame: CGRect) {
-    super.init(frame: frame)
+class NewsView: UIView, NibInitializable {
+  struct Props {
+    var news: [ArticleProps]
+    var isLoading: Bool
+    struct ArticleProps: Equatable {
+      let title: String
+      let url: URL?
+    }
+    init(state: News.State) {
+      self.news = state.article.map { ArticleProps(title: $0.title, url: URL(string: $0.url))}
+      self.isLoading = state.isNewsLoading
+    }
   }
-  required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
+
+  @IBOutlet private weak var table: UITableView!
+  @IBOutlet fileprivate weak var textField: UITextField!
+  @IBOutlet weak var indicator: UIActivityIndicatorView!
+
+  private var news: [Props.ArticleProps] = []
+  private var renderedProps: Props?
+
+  override func awakeFromNib() {
+    super.awakeFromNib()
+    setup()
   }
-  
-  
+
+  private func setup() {
+    table.dataSource = self
+    table.register(NewsTableViewCell.self)
+  }
+
+  func renderProps(props: Props) {
+    if props.news != renderedProps?.news {
+      self.news = props.news
+      table.reloadData()
+    }
+
+    if props.isLoading != renderedProps?.isLoading {
+      props.isLoading ? indicator.startAnimating() : indicator.stopAnimating()
+    }
+    renderedProps = props
+  }
 }
 
+extension NewsView: UITableViewDataSource {
+  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+      return news.count
+  }
+
+  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    let cell = table.dequeueReusableCell(for: indexPath, cellType: NewsTableViewCell.self)
+    cell.setNews(news[indexPath.row])
+    return cell
+  }
+}
+
+extension Reactive where Base: NewsView {
+  var continuousTextValues: Signal<String?, NoError> {
+    return base.textField.reactive.continuousTextValues
+  }
+}

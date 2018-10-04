@@ -15,22 +15,40 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="mre-OC-1TJ">
-                    <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="mre-OC-1TJ">
+                    <rect key="frame" x="0.0" y="50" width="375" height="617"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 </tableView>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MLr-r4-01D">
+                    <rect key="frame" x="0.0" y="20" width="375" height="30"/>
+                    <nil key="textColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits"/>
+                </textField>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="DEO-l8-m8D">
+                    <rect key="frame" x="169" y="315" width="37" height="37"/>
+                    <color key="color" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" red="0.0048598507420000003" green="0.096086271109999996" blue="0.57499289509999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="mre-OC-1TJ" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="6rv-nv-Ioc"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="mre-OC-1TJ" secondAttribute="trailing" id="9wr-xf-QWK"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="mre-OC-1TJ" secondAttribute="bottom" id="IgW-bD-9Py"/>
-                <constraint firstItem="mre-OC-1TJ" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="T7S-R0-FQP"/>
+                <constraint firstItem="mre-OC-1TJ" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="90u-pI-ImB"/>
+                <constraint firstAttribute="trailing" secondItem="mre-OC-1TJ" secondAttribute="trailing" id="C4F-Lu-SoA"/>
+                <constraint firstItem="DEO-l8-m8D" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="PHC-2g-XdG"/>
+                <constraint firstItem="mre-OC-1TJ" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="YVl-ZT-fcP"/>
+                <constraint firstItem="mre-OC-1TJ" firstAttribute="top" secondItem="MLr-r4-01D" secondAttribute="bottom" id="iWo-Nm-ZZA"/>
+                <constraint firstItem="mre-OC-1TJ" firstAttribute="trailing" secondItem="MLr-r4-01D" secondAttribute="trailing" id="l7f-Nw-AsF"/>
+                <constraint firstItem="MLr-r4-01D" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="qaS-he-dma"/>
+                <constraint firstItem="mre-OC-1TJ" firstAttribute="leading" secondItem="MLr-r4-01D" secondAttribute="leading" id="sz7-ty-oJc"/>
+                <constraint firstItem="DEO-l8-m8D" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="wWQ-Qp-qBm"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
+                <outlet property="indicator" destination="DEO-l8-m8D" id="Gzy-7Z-A9c"/>
                 <outlet property="table" destination="mre-OC-1TJ" id="gma-0J-aCD"/>
+                <outlet property="textField" destination="MLr-r4-01D" id="pTF-YV-poI"/>
             </connections>
+            <point key="canvasLocation" x="140" y="154.27286356821591"/>
         </view>
     </objects>
 </document>

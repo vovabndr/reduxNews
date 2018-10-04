@@ -7,58 +7,51 @@
 //
 
 import UIKit
-import RxSwift
-import RxCocoa
 import Result
 import ReactiveCocoa
 import ReactiveSwift
 
-extension News{
+extension News {
   final class ViewController: UIViewController {
+
+    let viewModel: ViewModel
+    init(viewModel: ViewModel) {
+      self.viewModel = viewModel
+      super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+      fatalError("init(coder:) has not been implemented")
+    }
+
     private lazy var newsView = NewsView.initFromNib()
-    
+
     override func loadView() {
       view = newsView
     }
-    
-    let viewModel = ViewModel()
-    
+
     override func viewDidLoad() {
       super.viewDidLoad()
-      
       bindUI()
     }
-    
-    private func bindUI () {
-      newsView.reactive.continuousTextValues
-        .observe(on: UIScheduler())
-        .take(duringLifetimeOf: self)
-//        .producer
-//        .map{$0! as String}
-//        .startWithValues { (text) in
-//          print(text)
-//      }
-////        .startWithValues {print($0)}
-        .observeValues {print($0)}
 
+    private func bindUI () {
       let inputs = ViewModel.Inputs(
-          viewWillAppear: reactive.viewDidDisappear,
-          searchText: newsView.reactive.searchText
+          viewWillAppear: reactive.viewWillAppear,
+          searchText: newsView.reactive.continuousTextValues
         )
-      
-      let outputs = viewModel.makeOutputs(inputs:  inputs)
-      
+
+      let outputs = viewModel.makeOutputs(inputs: inputs)
       outputs.props.producer
-        .observe(on: UIScheduler())
+        .observeForUI()
         .take(duringLifetimeOf: self)
-        .startWithValues { [weak self] (props) in
+        .startWithValues { [weak self] props in
           self?.renderProps(props)
         }
     }
-    
+
     private func renderProps(_ props: NewsView.Props) {
         newsView.renderProps(props: props)
-
     }
   }
 }

@@ -11,16 +11,10 @@ import UIKit
 class NewsTableViewCell: UITableViewCell, ReusableCell, NibInitializable {
 
   @IBOutlet weak var label: UILabel!
-  
-  override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+  @IBOutlet weak var urlLabel: UILabel!
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-    
+  func setNews(_ news: NewsView.Props.ArticleProps) {
+    self.label.text = news.title
+    self.urlLabel.text = news.url?.absoluteString
+  }
 }

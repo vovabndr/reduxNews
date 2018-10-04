@@ -8,8 +8,8 @@
 
 import Foundation
 extension News {
-    struct Article: Equatable {
+    struct Article: Equatable, Decodable {
       var title: String
       var url: String
-    }
+  }
 }

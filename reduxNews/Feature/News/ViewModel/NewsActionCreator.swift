@@ -12,27 +12,29 @@ import ReactiveSwift
 extension News {
   final class ActionCreator {
     let actions: Signal<Action, NoError>
-    
-    static var moc: [Article] = [
-      Article(title:"first", url: ""),
-      Article(title:"second", url: ""),
-      Article(title:"third", url: ""),
-      Article(title:"foutyh", url: "")
-    ]
-    
-    init(inputs: ViewModel.Inputs) {
-      let setNewsAction = inputs.viewWillAppear.take(first: 1)
-        .map { _ -> [Article] in News.ActionCreator.moc }
+
+    init(inputs: ViewModel.Inputs, newsService: NewsService) {
+      let error = Signal<String, NoError>.pipe()
+      let isLoading = Signal<Bool, NoError>.pipe()
+
+      let setLoadAction = inputs.searchText
+        .skipNil()
+        .flatMap(.latest) { (search) -> SignalProducer<[News.Article], NoError> in
+          newsService.getNews(search: search, page: 1)
+            .on(starting: { isLoading.input.send(value: true) },
+                terminated: {isLoading.input.send(value: false) })
+            .flatMapError { _ in SignalProducer<[News.Article], NoError>.empty }
+
+        }
         .map(Action.setNewsSuccess)
-      
-      let setNewsAction2 = inputs.searchText
-        .map { _ -> [Article] in News.ActionCreator.moc }
-        .map( Action.setNewsSuccess)
-      
-      let actions = Signal<Action, NoError>.merge(setNewsAction, setNewsAction2)
-      
-      self.actions = actions
+
+      let setErrorAction = error.output
+        .map(Action.setError)
+
+      let setLoadingAction = isLoading.output
+        .map(Action.loadStatus)
+
+      self.actions = Signal.merge(setLoadAction, setErrorAction, setLoadingAction)
     }
-    
   }
 }

@@ -9,17 +9,13 @@
 import Foundation
 extension News {
   static func reduce(state: State, action: Action) -> State {
-    var state = state
-    
     switch action {
-    case .setNews:
-      state.isNewsLoading = true
+    case .loadStatus(let status):
+      return state.lense(by: \State.isNewsLoading, value: status)
     case .setError:
-      state.isNewsLoading = false
-      state.error = "error"
+      return state.lense(by: \State.error, value: "error")
     case .setNewsSuccess(let newArticles):
-      state.article = newArticles
+      return state.lense(by: \State.article, value: newArticles)
     }
-    return state
   }
 }

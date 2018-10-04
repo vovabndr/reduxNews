@@ -18,29 +18,29 @@ extension News {
       let viewWillAppear: Signal<Void, NoError>
       let searchText: Signal<String?, NoError>
     }
-    
+
     struct Outputs {
       let props: Property<NewsView.Props>
     }
-    
-    init(){}
-    
+
+    let newsService: NewsService
+
+    init(newsService: NewsService) {
+      self.newsService = newsService
+    }
+
     func makeOutputs(inputs: Inputs) -> Outputs {
-      
       let initialState = State(article: [], error: nil, isNewsLoading: false)
       let store = ReduxStore<State, Action>(initialState: initialState, reducer: reduce)
-      
-      let props = store.state.map(StateToProps)
-      
-      
-      let actionCreator = ActionCreator(inputs: inputs)
-      
+
+      let props = store.state.map(stateToProps)
+
+      let actionCreator = ActionCreator(inputs: inputs, newsService: newsService)
       actionCreator.actions
         .take(duringLifetimeOf: self)
         .observeValues(store.dispatch)
-      
+
       return Outputs(props: props)
     }
-    
   }
 }

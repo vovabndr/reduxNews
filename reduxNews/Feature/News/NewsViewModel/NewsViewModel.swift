@@ -37,7 +37,7 @@ extension News {
     }
 
     func makeOutputs(inputs: Inputs) -> Outputs {
-      let initialState = State(article: [], error: nil, isNewsLoading: false)
+      let initialState = State(article: [], error: nil, isNewsLoading: false, page: 1)
       let (route, routingMiddleware) = News.makeRoutingMiddleware()
 
       let store = Store(initialState: initialState, reducer: reduce, middleWares: [routingMiddleware])

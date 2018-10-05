@@ -15,6 +15,7 @@ extension News {
     var article: [Article]
     var error: String?
     var isNewsLoading: Bool
+    var page: Int
   }
 
   enum Action {

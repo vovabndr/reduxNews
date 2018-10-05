@@ -12,16 +12,8 @@ import Result
 
 class NewsView: UIView, NibInitializable {
   struct Props {
-    var news: [ArticleProps]
+    var news: [News.Article]
     var isLoading: Bool
-    struct ArticleProps: Equatable {
-      let title: String
-      let url: URL?
-    }
-    init(state: News.State) {
-      self.news = state.article.map { ArticleProps(title: $0.title, url: URL(string: $0.url))}
-      self.isLoading = state.isNewsLoading
-    }
   }
 
   @IBOutlet private weak var table: UITableView!
@@ -29,7 +21,7 @@ class NewsView: UIView, NibInitializable {
   @IBOutlet weak var indicator: UIActivityIndicatorView!
 
   lazy var didSelectRowAt = Signal<Int, NoError>.pipe()
-  private var news: [Props.ArticleProps] = []
+  private var news: [News.Article] = []
   private var renderedProps: Props?
 
   override func awakeFromNib() {
@@ -51,13 +43,14 @@ class NewsView: UIView, NibInitializable {
     if props.isLoading != renderedProps?.isLoading {
       props.isLoading ? indicator.startAnimating() : indicator.stopAnimating()
     }
-
     renderedProps = props
   }
 }
 
 extension NewsView: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    print(news[indexPath.row])
+    tableView.deselectRow(at: indexPath, animated: true)
     didSelectRowAt.input.send(value: indexPath.row)
   }
 }

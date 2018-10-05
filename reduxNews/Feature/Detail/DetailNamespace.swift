@@ -9,4 +9,5 @@
 import Foundation
 
 enum Detail {
+  typealias Article = News.Article
 }

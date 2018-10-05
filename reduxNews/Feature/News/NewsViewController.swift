@@ -63,7 +63,9 @@ extension News {
     private func navigate(by route: Route) {
       switch route {
       case .detail(let article):
-        print(article.title)
+        let viewModel = Detail.ViewModel(article: article)
+        let vc = Detail.ViewController(viewModel: viewModel)
+        self.navigationController?.pushViewController(vc, animated: true)
       }
     }
   }

@@ -11,6 +11,7 @@ import ReactiveSwift
 
 extension News {
   final class ActionCreator {
+
     let actions: Signal<Action, NoError>
 
     init(inputs: ViewModel.Inputs, newsService: NewsService) {
@@ -19,12 +20,13 @@ extension News {
 
       let setLoadAction = inputs.searchText
         .skipNil()
-        .flatMap(.latest) { (search) -> SignalProducer<[News.Article], NoError> in
+        .flatMap(.latest) { search  in
           newsService.getNews(search: search, page: 1)
-            .on(starting: { isLoading.input.send(value: true) },
-                terminated: {isLoading.input.send(value: false) })
-            .flatMapError { _ in SignalProducer<[News.Article], NoError>.empty }
-
+            .on(
+              starting: { isLoading.input.send(value: true) },
+              terminated: { isLoading.input.send(value: false) }
+            )
+            .flatMapError { _ in .empty }
         }
         .map(Action.setNewsSuccess)
 

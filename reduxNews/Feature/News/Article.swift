@@ -10,6 +10,8 @@ import Foundation
 extension News {
     struct Article: Equatable, Decodable {
       var title: String
+      var description: String
       var url: String
+      var urlToImage: String
   }
 }

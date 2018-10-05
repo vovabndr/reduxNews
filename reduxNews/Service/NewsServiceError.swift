@@ -8,12 +8,19 @@
 
 import Foundation
 
-enum NewsServiceError: Error, CustomStringConvertible {
+enum NewsServiceError: Error, CustomStringConvertible, LocalizedError {
   case error(String)
 
+  var errorDescription: String {
+    switch self {
+      case .error(let message):
+        return message.description
+    }
+  }
   var description: String {
     switch self {
-    case .error(let message): return "\(message)"
+      case .error(let message):
+        return message.description
     }
   }
 }

@@ -16,13 +16,12 @@ extension News {
       let middleware = Store.makeMiddleware { _, getState, next, action in
         next(action)
         let state = getState()
-
         switch action {
-        case .select(let index):
+        case .selectCell(let index):
           routeSignal.input.send(value: Route.detail(state.article[index]))
+
         default: break
         }
-
     }
     return (routeSignal.output, middleware)
   }

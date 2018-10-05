@@ -22,10 +22,9 @@ final class NewsService: NewsServiceProtocol {
   }
 
   func getNews(search text: String, page: Int ) -> SignalProducer<[News.Article], NetworkError> {
-    let query: [String: Any] = ["page": "\(page)", "q": text, "apiKey": "0f6c253e10424cfba2b91e2c7e5d9b85"]
+    let query: [String: Any] = ["page": "\(page)", "q": text, "apiKey": "0cd429a696954c2b837a14efc187a904"]
     let target = NewsTarget(query: query)
-      return self.networkClient.request(target)
+    return self.networkClient.request(target)
         .map {$0.articles}
   }
-
 }

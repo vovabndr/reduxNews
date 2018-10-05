@@ -10,13 +10,17 @@ import Foundation
 extension News {
   static func reduce(state: State, action: Action) -> State {
     switch action {
-    case .loadStatus(let status):
-      return state.lense(by: \State.isNewsLoading, value: status)
-    case .setError:
-      return state.lense(by: \State.error, value: "error")
-    case .setNewsSuccess(let newArticles):
-      return state.lense(by: \State.article, value: newArticles)
-    case .select:
+    case .textFieldChange(let newText):
+      return state.lense(by: \State.searchInput, value: newText)
+        .lense(by: \State.page, value: 1)
+        .lense(by: \State.article, value: [])
+    case .loadNextArticles:
+      return state.lense(by: \State.page, value: state.page+1)
+    case .setArticles(let articles):
+      return state.lense(by: \State.article, value: state.article+articles)
+    case .showError(let error):
+      return state.lense(by: \State.errorMessage, value: error)
+    case .selectCell:
       return state
     }
   }

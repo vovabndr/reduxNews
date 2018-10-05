@@ -14,7 +14,7 @@ extension News {
   static func stateToProps(_ state: State) -> Props {
     return Props(
       news: state.article,
-      isLoading: state.isNewsLoading
+      errorMessage: state.errorMessage
     )
   }
 }

@@ -13,15 +13,16 @@ extension News {
 
   struct State: Lensable {
     var article: [Article]
-    var error: String?
-    var isNewsLoading: Bool
+    var errorMessage: String?
     var page: Int
+    var searchInput: String
   }
 
   enum Action {
-    case loadStatus(Bool)
-    case setNewsSuccess([Article])
-    case setError(String)
-    case select(Int)
+    case showError(String)
+    case textFieldChange(String)
+    case loadNextArticles
+    case setArticles([Article])
+    case selectCell(Int)
   }
 }

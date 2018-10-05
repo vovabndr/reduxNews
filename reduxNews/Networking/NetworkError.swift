@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 enum NetworkError: Error {
   case serializationError(message: String)

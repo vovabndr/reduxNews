@@ -13,14 +13,14 @@ import Result
 class NewsView: UIView, NibInitializable {
   struct Props {
     var news: [News.Article]
-    var isLoading: Bool
+    var errorMessage: String?
   }
 
   @IBOutlet private weak var table: UITableView!
   @IBOutlet fileprivate weak var textField: UITextField!
-  @IBOutlet weak var indicator: UIActivityIndicatorView!
 
   lazy var didSelectRowAt = Signal<Int, NoError>.pipe()
+  lazy var willDisplay = Signal<Void, NoError>.pipe()
   private var news: [News.Article] = []
   private var renderedProps: Props?
 
@@ -40,18 +40,19 @@ class NewsView: UIView, NibInitializable {
       self.news = props.news
       table.reloadData()
     }
-    if props.isLoading != renderedProps?.isLoading {
-      props.isLoading ? indicator.startAnimating() : indicator.stopAnimating()
-    }
     renderedProps = props
   }
 }
 
 extension NewsView: UITableViewDelegate {
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    print(news[indexPath.row])
     tableView.deselectRow(at: indexPath, animated: true)
     didSelectRowAt.input.send(value: indexPath.row)
+  }
+  func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    if indexPath.row == news.count-1 {
+      willDisplay.input.send(value: ())
+    }
   }
 }
 

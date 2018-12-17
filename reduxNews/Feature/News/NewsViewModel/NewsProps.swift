@@ -12,6 +12,9 @@ extension News {
   typealias Props = NewsView.Props
 
   static func stateToProps(_ state: State) -> Props {
-    return Props(state: state)
+    return Props(
+      news: state.article,
+      errorMessage: state.errorMessage
+    )
   }
 }

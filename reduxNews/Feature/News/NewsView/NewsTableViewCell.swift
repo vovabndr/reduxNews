@@ -13,8 +13,8 @@ class NewsTableViewCell: UITableViewCell, ReusableCell, NibInitializable {
   @IBOutlet weak var label: UILabel!
   @IBOutlet weak var urlLabel: UILabel!
 
-  func setNews(_ news: NewsView.Props.ArticleProps) {
+  func setNews(_ news: News.Article) {
     self.label.text = news.title
-    self.urlLabel.text = news.url?.absoluteString
+    self.urlLabel.text = news.url
   }
 }

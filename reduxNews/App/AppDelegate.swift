@@ -19,9 +19,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let network = NetworkClient(baseURL: URL(string: "https://newsapi.org/")!)
     let newsService = NewsService(networkClient: network)
     let viewModel = News.ViewModel(newsService: newsService)
-    window.rootViewController = News.ViewController(viewModel: viewModel)
+    let viewController = News.ViewController(viewModel: viewModel)
+    window.rootViewController = UINavigationController(rootViewController: viewController)
     window.makeKeyAndVisible()
-
+    window.backgroundColor = .white
     self.window = window
     return true
   }

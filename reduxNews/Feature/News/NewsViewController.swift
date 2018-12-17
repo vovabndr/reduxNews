@@ -19,39 +19,48 @@ extension News {
       self.viewModel = viewModel
       super.init(nibName: nil, bundle: nil)
     }
-
     required init?(coder aDecoder: NSCoder) {
       fatalError("init(coder:) has not been implemented")
     }
-
     private lazy var newsView = NewsView.initFromNib()
-
     override func loadView() {
       view = newsView
     }
-
     override func viewDidLoad() {
       super.viewDidLoad()
       bindUI()
     }
-
     private func bindUI () {
       let inputs = ViewModel.Inputs(
           viewWillAppear: reactive.viewWillAppear,
-          searchText: newsView.reactive.continuousTextValues
+          searchText: newsView.reactive.continuousTextValues,
+          selectedRow: newsView.didSelectRowAt.output,
+          willDisplay: newsView.willDisplay.output
         )
 
       let outputs = viewModel.makeOutputs(inputs: inputs)
+
       outputs.props.producer
         .observeForUI()
         .take(duringLifetimeOf: self)
         .startWithValues { [weak self] props in
           self?.renderProps(props)
         }
-    }
 
+      outputs.route.producer
+        .observeForUI()
+        .startWithValues { [weak self] route in self?.navigate(by: route) }
+    }
     private func renderProps(_ props: NewsView.Props) {
         newsView.renderProps(props: props)
+    }
+    private func navigate(by route: Route) {
+      switch route {
+      case .detail(let article):
+        let viewModel = Detail.ViewModel(article: article)
+        let vc = Detail.ViewController(viewModel: viewModel)
+        self.navigationController?.pushViewController(vc, animated: true)
+      }
     }
   }
 }
